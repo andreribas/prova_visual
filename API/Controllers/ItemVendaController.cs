@@ -37,9 +37,10 @@ namespace API.Controllers
         [Route("getbycartid/{cartid}")]
         public IActionResult GetByCartId([FromRoute] string cartId)
         {
-            return Ok(_context.ItensVenda
-                .Include(item => item.Produto.Categoria)
-                .Where(item => item.CarrinhoId == cartId).ToList());
+            return Ok(_context.ItensVenda.
+                Include(i => i.Produto.Categoria).
+                Where(i => i.CarrinhoId == cartId).
+                ToList());
         }
     }
 }
