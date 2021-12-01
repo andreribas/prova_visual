@@ -42,5 +42,15 @@ namespace API.Controllers
                 Where(i => i.CarrinhoId == cartId).
                 ToList());
         }
+
+        //GET: api/item/list
+        //ALTERAR O MÉTODO PARA MOSTRAR TODOS OS DADOS DA VENDA E OS DADOS RELACIONADOS
+        [HttpGet]
+        [Route("list")]
+        public IActionResult List()
+        {
+            return Ok(_context.ItensVenda
+                .ToList());
+        }
     }
 }

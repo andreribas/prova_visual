@@ -1,8 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, SystemJsNgModuleLoader } from "@angular/core";
 import { FormaPagamento } from "src/app/models/forma_pagamento";
 import { ItemVenda } from "src/app/models/item-venda";
 import { FormaPagamentoService } from "src/app/services/forma_pagamento.service";
 import { ItemService } from "src/app/services/item.service";
+import { VendaService } from "src/app/services/venda.service";
+import { Venda } from "src/app/models/venda";
 
 @Component({
     selector: "app-carrinho",
@@ -16,7 +18,11 @@ export class CarrinhoComponent implements OnInit {
     formaPagamentoId!: number;
     colunasExibidas: String[] = ["nome", "preco", "quantidade", "imagem"];
     valorTotal!: number;
-    constructor(private itemService: ItemService, private formaPagamentoService: FormaPagamentoService) {}
+    constructor(
+        private itemService: ItemService,
+        private formaPagamentoService: FormaPagamentoService,
+        private vendaService: VendaService
+    ) { }
 
     ngOnInit(): void {
         let carrinhoId = localStorage.getItem("carrinhoId")! || "";
@@ -31,6 +37,31 @@ export class CarrinhoComponent implements OnInit {
         });
     }
     finalizar(): void {
-        
+        const MapedItens = this.itens.map(
+            (item) =>
+                <ItemVenda>{
+                    produtoId: item.produtoId,
+                    quantidade: item.quantidade,
+                    preco: item.preco,
+                    carrinhoId: item.carrinhoId,
+                }
+        );
+        const venda: Venda = {
+            Cliente: this.nomeCliente,
+            Itens: MapedItens,
+            FormaPagamentoId: this.formaPagamentoId,
+        };
+        venda.FormaPagamentoId = this.formaPagamentoId;
+        this.vendaService.create(venda).subscribe((venda) => {
+            alert("Compra realizada com sucesso");
+
+            this.itens = [];
+            this.nomeCliente = "";
+            this.formaPagamentoId = 0;
+
+        }, (error) => {
+            alert("Erro: " + error.error)
+            console.log(error);
+        })
     }
 }
