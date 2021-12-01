@@ -12,3 +12,8 @@ img {
     width: 100px;
     height: 100px;
 }
+
+.input {
+    width: 50%;
+    display: block;
+}

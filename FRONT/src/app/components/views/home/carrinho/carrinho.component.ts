@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { FormaPagamento } from "src/app/models/forma_pagamento";
 import { ItemVenda } from "src/app/models/item-venda";
+import { FormaPagamentoService } from "src/app/services/forma_pagamento.service";
 import { ItemService } from "src/app/services/item.service";
 
 @Component({
@@ -9,9 +11,12 @@ import { ItemService } from "src/app/services/item.service";
 })
 export class CarrinhoComponent implements OnInit {
     itens: ItemVenda[] = [];
+    nomeCliente: string = "";
+    formasPagamento: FormaPagamento[] = [];
+    formaPagamentoId!: number;
     colunasExibidas: String[] = ["nome", "preco", "quantidade", "imagem"];
     valorTotal!: number;
-    constructor(private itemService: ItemService) {}
+    constructor(private itemService: ItemService, private formaPagamentoService: FormaPagamentoService) {}
 
     ngOnInit(): void {
         let carrinhoId = localStorage.getItem("carrinhoId")! || "";
@@ -21,5 +26,11 @@ export class CarrinhoComponent implements OnInit {
                 return total + item.preco * item.quantidade;
             }, 0);
         });
+        this.formaPagamentoService.list().subscribe((formasPagamento) => {
+            this.formasPagamento = formasPagamento;
+        });
+    }
+    finalizar(): void {
+        
     }
 }

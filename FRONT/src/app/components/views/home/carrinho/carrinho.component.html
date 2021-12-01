@@ -44,4 +44,31 @@
             Total: {{ valorTotal | currency: "BRL" }}
         </mat-card-title>
     </mat-card-header>
+
+</mat-card>
+<br>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Finalizar compra</mat-card-title>
+    </mat-card-header>
+
+
+    <mat-form-field class="input" id="nomeCliente">
+        <mat-label for="nomeCliente">Nome Cliente:</mat-label>
+        <input matInput type="text" name="nomeCliente" [(ngModel)]="nomeCliente" />
+    </mat-form-field>
+    <mat-form-field class="input" id="formaPagamento">
+        <mat-label for="formaPagamento">Forma de pagamento:</mat-label>
+        <mat-select name="formaPagamentoId" [(ngModel)]="formaPagamentoId">
+            <mat-option
+                *ngFor="let formaPagamento of formasPagamento"
+                value="{{ formaPagamento.formaPagamentoId }}"
+            >
+                {{ formaPagamento.tipo }} - {{ formaPagamento.bandeira }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="finalizar()">
+        Finalizar
+    </button>
 </mat-card>
